@@ -5,27 +5,26 @@ import {unpkgPathPlugin} from "./plugin/unpkg-path-plugin";
 import {fetchPlugin} from "./plugin/fetch-plugin";
 
 const App = () => {
-    const ref = useRef<any>()
-    const [input, setInput] = useState('');
-    const [code, setCode] = useState('');
+  const ref = useRef<any>();
+  const [input, setInput] = useState('');
+  const [code, setCode] = useState('');
 
     const startService = async () => {
         ref.current = await esbuild.startService({
             worker: true,
-            wasmURL: '/esbuild.wasm'
+            wasmURL: 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm'
         });
-
-    }
+    };
 
 
     useEffect(() => {
         startService();
-    }, [])
+    }, []);
 
 
     const onClick = async () => {
         if (!ref.current) {
-            return
+            return;
         }
         const result = await ref.current.build({
             entryPoints: ['index.js'],
@@ -36,7 +35,7 @@ const App = () => {
                 fetchPlugin(input)
             ],
             define: {
-                'process.env.NIDE_ENV': '"production"',
+                'process.env.NODE_ENV': '"production"',
                 global: 'window'
             }
         })
@@ -45,7 +44,7 @@ const App = () => {
 
     return (
         <div>
-            <textarea name="" id="" value={input} onChange={(e) => setInput(e.target.value)} />
+            <textarea value={input} onChange={(e) => setInput(e.target.value)} />
             <div>
                 <button onClick={onClick}>Submit</button>
             </div>
