@@ -44,6 +44,6 @@
     ]
   },
   "devDependencies": {
-
+    "@monaco-editor/react": "3.7.5"
   }
 }
