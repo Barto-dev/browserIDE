@@ -7,6 +7,11 @@ interface PreviewProps {
 
 const html = `
 <html>
+<style>
+html {
+background-color:#fff;
+}
+</style>
 <head></head>
 <body>
 <div id="root"></div>
@@ -30,16 +35,18 @@ const Preview: React.FC<PreviewProps> = ({code}) => {
     const iframe = useRef<any>();
     useEffect(() => {
         iframe.current.srcdoc = html;
-          iframe.current.contentWindow.postMessage(code, '*')
+        iframe.current.contentWindow.postMessage(code, '*')
     }, [code])
 
     return (
-        <iframe
-            className="preview"
-            title="preview"
-            ref={iframe}
-            sandbox="allow-scripts"
-            srcDoc={html}/>
+        <div className="preview-wrapper">
+            <iframe
+                className="preview"
+                title="preview"
+                ref={iframe}
+                sandbox="allow-scripts"
+                srcDoc={html} />
+        </div>
     );
 };
 
