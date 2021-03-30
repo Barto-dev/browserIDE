@@ -2,7 +2,8 @@ import React, {useRef, useEffect} from 'react';
 import './preview.css'
 
 interface PreviewProps {
-    code: string
+    code: string,
+    bundlingErr: string
 }
 
 const html = `
@@ -16,13 +17,23 @@ background-color:#fff;
 <body>
 <div id="root"></div>
 <script>
+const handleError = (err) => {
+     const root = document.querySelector('#root');
+    root.innerHTML = '<div style="color:red;"><h4>' + err + '</h4></div>';
+    console.error(err);
+}
+
+window.addEventListener('error', (evt) => {
+  evt.preventDefault();
+  handleError(evt.error)
+})
+
+// Если мы обрабатываем ошибку в блоке try catch то событие error не вызывается
 window.addEventListener('message', (evt) => {
   try {
     eval(evt.data);
   } catch (err) {
-    const root = document.querySelector('#root');
-    root.innerHTML = '<div style="color:red;"><h4>' + err + '</h4></div>';
-    console.error(err);
+    handleError(err)
   }
   
   }, false)
@@ -31,14 +42,14 @@ window.addEventListener('message', (evt) => {
 </html>
 `;
 
-const Preview: React.FC<PreviewProps> = ({code}) => {
+const Preview: React.FC<PreviewProps> = ({code,bundlingErr}) => {
     const iframe = useRef<any>();
     useEffect(() => {
         iframe.current.srcdoc = html;
         setTimeout(() => {
             iframe.current.contentWindow.postMessage(code, '*')
         }, 50)
-    }, [code])
+    }, [code]);
 
     return (
         <div className="preview-wrapper">
@@ -48,6 +59,7 @@ const Preview: React.FC<PreviewProps> = ({code}) => {
                 ref={iframe}
                 sandbox="allow-scripts"
                 srcDoc={html} />
+            {bundlingErr && <div className="preview-error">{bundlingErr}</div>}
         </div>
     );
 };
