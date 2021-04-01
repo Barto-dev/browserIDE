@@ -1,4 +1,6 @@
 import ReactDOM from 'react-dom';
+import {Provider} from "react-redux";
+import {store} from "./redux";
 import CodeCell from "./components/code-cell/code-cell";
 import TextEditor from "./components/text-editor/text-editor";
 
@@ -9,11 +11,12 @@ const App = () => {
 
 
     return (
-        <div>
-           {/*<CodeCell />*/}
-           <TextEditor />
-
-        </div>
+        <Provider store={store}>
+            <div>
+                {/*<CodeCell />*/}
+                <TextEditor />
+            </div>
+        </Provider>
     )
 }
 
