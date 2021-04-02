@@ -1,5 +1,5 @@
 import {ActionType} from "../action-types";
-import {Action} from "../actions";
+import {Action, UpdateCellAction} from "../actions";
 import {Cell} from "../cell";
 
 interface CellsState {
@@ -18,10 +18,24 @@ const initialState: CellsState = {
     data: {},
 }
 
+const updateCellState = (state: CellsState, action: UpdateCellAction) => {
+    const {id, content} = action.payload;
+    return {
+        ...state,
+        data: {
+            ...state.data,
+            [id]: {
+                ...state.data[id],
+                content
+            }
+        }
+    }
+}
+
 const cellsReducer = (state: CellsState = initialState, action: Action): CellsState => {
     switch (action.type) {
         case ActionType.UPDATE_CELL:
-            return state;
+            return updateCellState(state, action)
         case ActionType.DELETE_CELL:
             return state;
         case ActionType.MOVE_CELL:
@@ -35,3 +49,15 @@ const cellsReducer = (state: CellsState = initialState, action: Action): CellsSt
 }
 
 export default cellsReducer;
+
+            // const {id, content} = action.payload;
+            // return {
+            //     ...state,
+            //     data: {
+            //         ...state.data,
+            //         [id]: {
+            //             ...state.data[id],
+            //             content
+            //         }
+            //     }
+            // }
