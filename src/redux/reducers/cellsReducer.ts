@@ -20,20 +20,6 @@ const initialState: CellsState = {
     data: {},
 }
 
-const updateCellState = (state: CellsState, action: UpdateCellAction) => {
-    const {id, content} = action.payload;
-    return {
-        ...state,
-        data: {
-            ...state.data,
-            [id]: {
-                ...state.data[id],
-                content
-            }
-        }
-    }
-}
-
 const cellsReducer = produce((
     state: CellsState = initialState,
     action: Action) => {
@@ -58,14 +44,3 @@ const cellsReducer = produce((
 
 export default cellsReducer;
 
-            // const {id, content} = action.payload;
-            // return {
-            //     ...state,
-            //     data: {
-            //         ...state.data,
-            //         [id]: {
-            //             ...state.data[id],
-            //             content
-            //         }
-            //     }
-            // }
