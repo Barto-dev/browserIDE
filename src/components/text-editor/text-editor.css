@@ -1,4 +1,4 @@
-.w-md-editor .title {
+.text-editor .w-md-editor .title {
     line-height: unset;
     font-size: unset;
     font-weight: unset;
@@ -7,6 +7,10 @@
 
 .w-md-editor ul {
     line-height: 1;
+}
+
+.w-md-editor-text {
+    color: #d4d4d4;
 }
 
 .text-editor .w-md-editor-bar svg {
