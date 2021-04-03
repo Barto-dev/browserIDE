@@ -33,7 +33,17 @@ const cellsReducer = produce((
             state.order = state.order.filter(id => id !== action.payload);
             return;
         case ActionType.MOVE_CELL:
-            return state;
+            const {direction} = action.payload;
+            const index = state.order.findIndex((id) => action.payload.id);
+            const targetIndex = direction === 'up' ? index - 1 : index + 1;
+
+            if (targetIndex < 0 || targetIndex > state.order.length - 1) {
+                return;
+            }
+            // Put a cell in the place of which the swapped element should become
+            state.order[index] = state.order[targetIndex];
+            state.order[targetIndex] = action.payload.id;
+            return
         case ActionType.INSET_CELL_BEFORE:
             return state;
         default:
