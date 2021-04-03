@@ -1,7 +1,7 @@
 import produce from "immer";
 
 import {ActionType} from "../action-types";
-import {Action, UpdateCellAction} from "../actions";
+import {Action} from "../actions";
 import {Cell} from "../cell";
 
 interface CellsState {
@@ -45,12 +45,34 @@ const cellsReducer = produce((
             state.order[targetIndex] = action.payload.id;
             return
         case ActionType.INSET_CELL_BEFORE:
+            const cell: Cell = {
+                content: '',
+                type: action.payload.type,
+                id: randomId()
+            }
+
+            state.data[cell.id] = cell;
+
+            const insertIndex = state.order.findIndex(id => id === action.payload.id);
+            if (insertIndex < 0) {
+                state.order.push(cell.id)
+            } else {
+                // inser id in the selected but dont delete any elements (0)
+                state.order.splice(insertIndex, 0, cell.id)
+            }
             return state;
         default:
             return state
     }
 
 });
+
+const randomId = () => {
+    return Math
+        .random()
+        .toString(36)
+        .substr(2, 5)
+}
 
 export default cellsReducer;
 
