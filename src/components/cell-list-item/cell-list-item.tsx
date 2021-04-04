@@ -1,9 +1,22 @@
 import React from 'react';
+import {Cell} from "../../redux";
+import CodeCell from "../code-cell/code-cell";
+import TextEditor from "../text-editor/text-editor";
 
-const CellListItem: React.FC = () => {
+interface CellListItemProps {
+    cell: Cell;
+}
+
+const CellListItem: React.FC<CellListItemProps> = ({cell}) => {
+    let child: JSX.Element;
+    if (cell.type === 'code') {
+        child = <CodeCell cell={cell}/>
+    } else {
+        child = <TextEditor />
+    }
     return (
         <div>
-            Cell list item
+            {child}
         </div>
     );
 };
