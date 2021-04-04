@@ -27,23 +27,23 @@ const cellsReducer = produce((
         case ActionType.UPDATE_CELL:
             const {id, content} = action.payload;
             state.data[id].content = content;
-            return state;
+            return;
         case ActionType.DELETE_CELL:
             delete state.data[action.payload];
             state.order = state.order.filter(id => id !== action.payload);
-            return state;
+            return;
         case ActionType.MOVE_CELL:
             const {direction} = action.payload;
-            const index = state.order.findIndex((id) => action.payload.id);
+            const index = state.order.findIndex((id) => id === action.payload.id);
             const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
             if (targetIndex < 0 || targetIndex > state.order.length - 1) {
-                return state;
+                return;
             }
             // Put a cell in the place of which the swapped element should become
             state.order[index] = state.order[targetIndex];
             state.order[targetIndex] = action.payload.id;
-            return state;
+            return;
         case ActionType.INSET_CELL_BEFORE:
             const cell: Cell = {
                 content: '',
@@ -60,12 +60,12 @@ const cellsReducer = produce((
                 // insert id in the selected but dont delete any elements (0)
                 state.order.splice(insertIndex, 0, cell.id)
             }
-            return state;
+            return;
         default:
             return state
     }
+}, initialState);
 
-});
 
 const randomId = () => {
     return Math
