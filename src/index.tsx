@@ -4,6 +4,7 @@ import {store} from "./redux";
 import CellList from "./components/cell-list/cell-list";
 
 import 'bulmaswatch/superhero/bulmaswatch.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const App = () => {
 
