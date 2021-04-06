@@ -5,8 +5,6 @@ import {ActionType} from "./action-types";
 
 export const store = createStore(reducers, {}, applyMiddleware(thunk));
 
-const updateId  = store.getState().cells.order[0];
-
 store.dispatch({
     type: ActionType.INSET_CELL_BEFORE,
     payload: {
