@@ -44,7 +44,7 @@ const cellsReducer = produce((
             state.order[index] = state.order[targetIndex];
             state.order[targetIndex] = action.payload.id;
             return;
-        case ActionType.INSET_CELL_BEFORE:
+        case ActionType.INSERT_CELL_AFTER:
             const cell: Cell = {
                 content: '',
                 type: action.payload.type,
@@ -55,10 +55,10 @@ const cellsReducer = produce((
 
             const insertIndex = state.order.findIndex(id => id === action.payload.id);
             if (insertIndex < 0) {
-                state.order.push(cell.id)
+                state.order.unshift(cell.id)
             } else {
                 // insert id in the selected but dont delete any elements (0)
-                state.order.splice(insertIndex, 0, cell.id)
+                state.order.splice(insertIndex + 1, 0, cell.id)
             }
             return;
         default:
