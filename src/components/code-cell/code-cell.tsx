@@ -7,6 +7,8 @@ import CodeEditor from "../code-editor/code-editor";
 import Preview from "../preview/preview";
 import Resizable from "../resizable/resizable";
 
+import './code-cell.css';
+
 interface CodeCellProps {
     cell: Cell;
 }
@@ -37,7 +39,17 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
                 <Resizable direction="horizontal">
                     <CodeEditor initialValue={cell.content} onChange={(value) => updateCell(cell.id, value)} />
                 </Resizable>
-                {bundle && <Preview code={bundle.code} bundlingErr={bundle.err} />}
+                {
+                    !bundle || bundle.loading
+                        ? (
+                            <div className="progress-cover">
+                                <progress className="progress is-small is-primary" max="100">
+                                    Loading
+                                </progress>
+                            </div>
+                        )
+                        : (<Preview code={bundle.code} bundlingErr={bundle.err} />)
+                }
             </div>
         </Resizable>
     )
