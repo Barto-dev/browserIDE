@@ -17,6 +17,22 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
 
     const {updateCell, createBundle} = useActions();
     const bundle = useTypedSelector((state) => state.bundles[cell.id]);
+    const cumulativeCode = useTypedSelector((state) => {
+        const {data, order} = state.cells;
+        const orderedCells = order.map((id) => data[id]);
+        const cumulativeCodeArr = [];
+        for (let c of orderedCells) {
+            if (c.type === 'code') {
+                cumulativeCodeArr.push(c.content)
+            }
+            if (c.id === cell.id) {
+                break
+            }
+        }
+        return cumulativeCodeArr;
+    });
+
+    console.log(cumulativeCode)
 
     // debounce
     useEffect(() => {
@@ -39,17 +55,17 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
                 <Resizable direction="horizontal">
                     <CodeEditor initialValue={cell.content} onChange={(value) => updateCell(cell.id, value)} />
                 </Resizable>
-                {
-                    !bundle || bundle.loading
-                        ? (
-                            <div className="progress-cover">
+                <div className="progress-wrapper">
+                    {
+                        !bundle || bundle.loading
+                            ? (<div className="progress-cover">
                                 <progress className="progress is-small is-primary" max="100">
                                     Loading
                                 </progress>
-                            </div>
-                        )
-                        : (<Preview code={bundle.code} bundlingErr={bundle.err} />)
-                }
+                            </div>)
+                            : (<Preview code={bundle.code} bundlingErr={bundle.err} />)
+                    }
+                </div>
             </div>
         </Resizable>
     )
