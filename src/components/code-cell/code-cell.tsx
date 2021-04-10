@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import {Cell} from "../../redux";
 import {useActions} from "../../hooks/use-action";
 import {useTypedSelector} from "../../hooks/use-typed-selector";
+import {useCumulativeCode} from "../../hooks/use-cumulative-code";
 
 import CodeEditor from "../code-editor/code-editor";
 import Preview from "../preview/preview";
@@ -17,37 +18,8 @@ const CodeCell: React.FC<CodeCellProps> = ({cell}) => {
 
     const {updateCell, createBundle} = useActions();
     const bundle = useTypedSelector((state) => state.bundles[cell.id]);
-    const cumulativeCode = useTypedSelector((state) => {
-        const {data, order} = state.cells;
-        const orderedCells = order.map((id) => data[id]);
-        const cumulativeCodeArr = [
-            `
-            const show = (value) => {
-            const root = document.querySelector('#root');
-                if (typeof value === 'object') {
-                    if (value.$$typeof && value.props) {
-                    ReactDOM.render(value, root)
-                    } else {
-                    root.innerHTML = JSON.stringify(value);
-                    }
-                } else {
-                root.innerHTML = value;
-               }
-             }
-            `
-        ];
-        for (let c of orderedCells) {
-            if (c.type === 'code') {
-                cumulativeCodeArr.push(c.content)
-            }
-            if (c.id === cell.id) {
-                break
-            }
-        }
-        return cumulativeCodeArr;
-    });
+    const cumulativeCode = useCumulativeCode(cell.id)
 
-    console.log(cumulativeCode)
 
     // debounce
     useEffect(() => {
