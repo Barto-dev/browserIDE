@@ -39,5 +39,8 @@ export const useCumulativeCode = (cellId: string) => {
             }
         }
         return cumulativeCodeArr;
-    });
+    }).join('\n');
 }
+//
+// const App = () => <h1>Component</h1>;
+// show(<App />)
